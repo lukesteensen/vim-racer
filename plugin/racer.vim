@@ -27,23 +27,6 @@ if !exists('g:racer_cmd')
     let g:racer_cmd = 'racer'
 endif
 
-" Expand "~" and environment variables
-let g:racer_cmd = expand(g:racer_cmd)
-let $RUST_SRC_PATH = expand($RUST_SRC_PATH)
-
-if !exists('$RUST_SRC_PATH')
-    let s:rust_src_default = 1
-    if isdirectory("/usr/local/src/rust/src")
-        let $RUST_SRC_PATH="/usr/local/src/rust/src"
-    endif
-    if isdirectory("/usr/src/rust/src")
-        let $RUST_SRC_PATH="/usr/src/rust/src"
-    endif
-    if isdirectory("C:\\rust\\src")
-        let $RUST_SRC_PATH="C:\\rust\\src"
-    endif
-endif
-
 if !exists('g:racer_experimental_completer')
     let g:racer_experimental_completer = 0
 endif
@@ -277,15 +260,6 @@ function! s:ErrorCheck()
     if !executable(g:racer_cmd)
         call s:Warn("No racer executable found in $PATH (" . $PATH . ")")
         return 1
-    endif
-
-    if !isdirectory($RUST_SRC_PATH)
-        if exists('s:rust_src_default')
-            call s:Warn("No RUST_SRC_PATH environment variable present, nor could default installation be found at: " . $RUST_SRC_PATH)
-        else
-            call s:Warn("No directory was found at provided RUST_SRC_PATH: " . $RUST_SRC_PATH)
-        endif
-        return 2
     endif
 endfunction
 
